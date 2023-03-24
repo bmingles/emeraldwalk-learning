@@ -8,9 +8,9 @@ export type DeltaHandler = (delta: number) => void
 
 export function addGridHelper(scene: THREE.Scene) {
   const gridHelper = new THREE.GridHelper(20, 20)
-  gridHelper.position.setX(-0.5)
-  gridHelper.position.setY(-0.5)
-  gridHelper.rotateX(Math.PI / 2)
+  // gridHelper.position.setX(-0.5)
+  // gridHelper.position.setY(-0.5)
+  // gridHelper.rotateX(Math.PI / 2)
   scene.add(gridHelper)
 }
 
@@ -38,6 +38,11 @@ export function createTickers(
   return updaters.map((u) => ({ tick: (delta) => u.update(delta) }))
 }
 
+export interface LoadedModelConfig {
+  actions: Record<string, THREE.AnimationAction>
+  dispose: () => void
+}
+
 export function createLoadModel({
   modelUrl,
   cameraPosition: [x, y, z],
@@ -45,7 +50,9 @@ export function createLoadModel({
   modelUrl: string
   cameraPosition: [number, number, number]
 }) {
-  return async function loadModel(container: HTMLElement): Promise<() => void> {
+  return async function loadModel(
+    container: HTMLElement,
+  ): Promise<LoadedModelConfig> {
     const world = new World(container)
     world.camera.position.set(x, y, z)
 
@@ -62,8 +69,12 @@ export function createLoadModel({
 
     const clip = file.animations[0] //.find((a) => a.name === 'Walk')
     const mixer = new THREE.AnimationMixer(model)
-    const action = mixer.clipAction(clip!)
-    action.play()
+
+    const actions = file.animations.reduce((memo, clip) => {
+      memo[clip.name] = mixer.clipAction(clip)
+      return memo
+    }, {} as Record<string, THREE.AnimationAction>)
+
     world.scene.add(model)
 
     console.log('gltf:', file)
@@ -76,6 +87,9 @@ export function createLoadModel({
 
     world.start(createTickers(mixer))
 
-    return world.dispose
+    return {
+      actions,
+      dispose: world.dispose,
+    }
   }
 }
