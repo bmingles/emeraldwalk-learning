@@ -25,6 +25,8 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
     }
   }, [load])
 
+  const hasActions = Object.keys(config?.actions ?? {}).length > 0
+
   const onActionChange = React.useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       const newAction = event.currentTarget.value
@@ -44,14 +46,16 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
 
   return (
     <>
-      <select value={action} onChange={onActionChange}>
-        <option>- Action -</option>
-        {Object.entries(config?.actions ?? {}).map(([key]) => (
-          <option key={key} value={key}>
-            {key}
-          </option>
-        ))}
-      </select>
+      {hasActions && (
+        <select value={action} onChange={onActionChange}>
+          <option>- Action -</option>
+          {Object.entries(config?.actions ?? {}).map(([key]) => (
+            <option key={key} value={key}>
+              {key}
+            </option>
+          ))}
+        </select>
+      )}
       <div ref={containerRef} style={{ width: 400, height: 400 }}></div>
     </>
   )

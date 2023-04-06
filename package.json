@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prebuild": "node scripts/preBuild.mjs > src/models/metaList.ts"
+    "prebuild": "node scripts/preBuild.mjs > src/models/metaList.ts",
+    "predev": "npm run prebuild"
   },
   "dependencies": {
     "@mdx-js/loader": "^2.3.0",
