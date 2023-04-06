@@ -30,11 +30,11 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
       const newAction = event.currentTarget.value
 
       if (action) {
-        config?.actions[action].stop()
+        config?.actions[action]?.stop()
       }
 
       if (newAction) {
-        config?.actions[newAction].play()
+        config?.actions[newAction]?.play()
       }
 
       setAction(newAction)
