@@ -2,17 +2,20 @@ import ThreeScene from '@/components/ThreeScene'
 import { createLoadModel } from '@/examples/threejs/utils'
 
 export const meta = {
-  title: 'Pirate (Imphenzia 10 Minutes in Blender)',
-  date: '2023-03-20',
+  title: 'Pirate',
+  date: '2023-04-06',
 }
 
 export function getStaticProps() {
   return { props: { meta } }
 }
 
+Imphenzia 10 Minutes in Blender - Lesson 11
+
 <ThreeScene
   load={createLoadModel({
     modelUrl: '/assets/emeraldwalk/011.pirate.fbx',
-    cameraPosition: [1, 2, 3.5],
+    cameraPosition: [1, 200, 200],
+    cameraLookAt: [0, 100, 0],
   })}
 />

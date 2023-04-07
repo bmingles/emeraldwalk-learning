@@ -3,13 +3,16 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { World } from './World'
 import {
+  LoadedModelConfig,
   addGridHelper,
   addLights,
   addOrbitControls,
   createTickers,
 } from './utils'
 
-export async function loadScene(container: HTMLElement): Promise<() => void> {
+export async function loadScene(
+  container: HTMLElement,
+): Promise<LoadedModelConfig> {
   const world = new World(container)
   world.camera.position.set(-1.5, 1.5, 6.5)
 
@@ -48,11 +51,14 @@ export async function loadScene(container: HTMLElement): Promise<() => void> {
   const moveAndBlinkClip = createMoveAndBlinkClip()
   const mixer = new THREE.AnimationMixer(cube)
   const action = mixer.clipAction(moveAndBlinkClip)
-  action.play()
+  // action.play()
 
   world.start(createTickers(mixer, parrotMixer))
 
-  return world.dispose
+  return {
+    actions: { [moveAndBlinkClip.name]: action },
+    dispose: world.dispose,
+  }
 }
 
 function createMoveAndBlinkClip() {

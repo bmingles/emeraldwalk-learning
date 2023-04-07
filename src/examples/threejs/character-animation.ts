@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {
+  LoadedModelConfig,
   addGridHelper,
   addLights,
   addOrbitControls,
@@ -8,7 +9,9 @@ import {
 } from './utils'
 import { World } from './World'
 
-export async function loadScene(container: HTMLElement): Promise<() => void> {
+export async function loadScene(
+  container: HTMLElement,
+): Promise<LoadedModelConfig> {
   const world = new World(container)
   world.camera.position.set(0, 1.5, 6.5)
 
@@ -35,5 +38,8 @@ export async function loadScene(container: HTMLElement): Promise<() => void> {
 
   world.start(createTickers(mixer))
 
-  return world.dispose
+  return {
+    actions: { [clip!.name]: action },
+    dispose: world.dispose,
+  }
 }

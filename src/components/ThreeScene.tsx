@@ -9,7 +9,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
   const containerRef = React.useRef<HTMLDivElement>(null)
   const [config, setConfig] = React.useState<LoadedModelConfig | null>(null)
   const [action, setAction] = React.useState<string>()
-
+  console.log(action)
   React.useEffect(() => {
     let dispose: () => void
 

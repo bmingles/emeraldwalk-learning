@@ -2,13 +2,6 @@
 export const metaList = [
   {
     "author": "Brian Ingles",
-    "slug": "animation",
-    "ext": "mdx",
-    "title": "Animation",
-    "date": "2023-03-19"
-  },
-  {
-    "author": "Brian Ingles",
     "slug": "character-animation",
     "ext": "mdx",
     "title": "Character Animation",
@@ -39,8 +32,8 @@ export const metaList = [
     "author": "Brian Ingles",
     "slug": "pirate",
     "ext": "mdx",
-    "title": "Pirate (Imphenzia 10 Minutes in Blender)",
-    "date": "2023-03-20"
+    "title": "Pirate",
+    "date": "2023-04-06"
   },
   {
     "author": "Brian Ingles",

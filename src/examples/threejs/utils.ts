@@ -46,9 +46,11 @@ export interface LoadedModelConfig {
 export function createLoadModel({
   modelUrl,
   cameraPosition: [x, y, z],
+  cameraLookAt,
 }: {
   modelUrl: string
   cameraPosition: [number, number, number]
+  cameraLookAt?: [number, number, number]
 }) {
   return async function loadModel(
     container: HTMLElement,
@@ -83,7 +85,18 @@ export function createLoadModel({
     // Lights
     addGridHelper(world.scene)
     addLights(world.scene)
-    addOrbitControls(world.camera, world.renderer.domElement)
+    addOrbitControls(
+      world.camera,
+      world.renderer.domElement,
+      cameraLookAt
+        ? new THREE.Vector3(cameraLookAt[0], cameraLookAt[1], cameraLookAt[2])
+        : undefined,
+    )
+
+    if (cameraLookAt) {
+      const [x, y, z] = cameraLookAt
+      world.camera.lookAt(x, y, z)
+    }
 
     world.start(createTickers(mixer))
 
