@@ -1,0 +1,21 @@
+import Animation2D from '@/components/Animation2D'
+
+export const meta = {
+  title: 'Ninja 2D',
+  date: '2023-04-06',
+  tags: ['animation', 'imphenzia', '2D'],
+}
+
+export function getStaticProps() {
+  return { props: { meta } }
+}
+
+export const keys = [0, 1, 2, 3, 4, 5, 6, 7]
+
+<Animation2D
+  frames={{
+    S: keys.map((i) => `assets/emeraldwalk/ninja2d/walk_0_${i}.25.png`),
+    SE: keys.map((i) => `assets/emeraldwalk/ninja2d/walk_45_${i}.25.png`),
+    SW: keys.map((i) => `assets/emeraldwalk/ninja2d/walk_315_${i}.25.png`),
+  }}
+/>

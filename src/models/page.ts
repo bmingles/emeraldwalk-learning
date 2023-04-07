@@ -3,6 +3,7 @@ export interface Meta {
   author?: string
   slug?: string
   ext?: string
+  tags?: string[]
   createdAt?: string
 }
 
