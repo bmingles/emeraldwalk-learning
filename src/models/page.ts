@@ -1,10 +1,10 @@
 export interface Meta {
   title?: string
+  date?: string
   author?: string
   slug?: string
   ext?: string
   tags?: string[]
-  createdAt?: string
 }
 
 export interface PageProps {
