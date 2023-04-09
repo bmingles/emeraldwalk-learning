@@ -6,6 +6,7 @@ import { PageProps } from '../models/page'
 import { metaList } from '../models/metaList'
 import styles from './Layout.module.css'
 import cl from 'classnames'
+import Menu from './Menu'
 
 export interface LayoutProps extends PageProps {}
 
@@ -28,13 +29,14 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
       </Head>
       <div className={cl(styles.container, styles.areaGrid)}>
         <header className={cl(styles.itemHeader, styles.content)}>
+          <Menu className={styles.menu} metaList={metaList} />
           <Link href="/">🏡 Emeraldwalk Learning</Link>
         </header>
         <main className={cl(styles.itemMain, styles.content)}>
           <h1>{meta?.title}</h1>
           {children}
         </main>
-        <aside className={styles.itemSide}>
+        <aside className={styles.itemRight}>
           {pageLinks?.map(({ slug, title }) => (
             <Link key={slug} href={`/${slug}`}>
               {title}

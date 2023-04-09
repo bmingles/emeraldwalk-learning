@@ -1,0 +1,29 @@
+.component {
+  position: relative;
+
+  .button {
+    display: flex;
+    flex-direction: column;
+    font-size: 40px;
+    font-family: arial;
+    line-height: 1em;
+    margin-top: -6px;
+  }
+  .label {
+    font-size: 12px;
+  }
+  .items {
+    background-color: #fff;
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    top: 40px;
+    > * {
+      padding: 4px 8px;
+      white-space: nowrap;
+      // &:hover {
+      //   background-color: #99e;
+      // }
+    }
+  }
+}
