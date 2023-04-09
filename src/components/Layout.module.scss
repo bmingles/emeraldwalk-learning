@@ -28,6 +28,9 @@
 .itemMain {
   grid-area: main;
 }
+.attribution {
+  display: block;
+}
 .itemRight {
   display: flex;
   flex-direction: column;

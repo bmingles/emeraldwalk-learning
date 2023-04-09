@@ -4,7 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import { PageProps } from '../models/page'
 import { metaList } from '../models/metaList'
-import styles from './Layout.module.css'
+import styles from './Layout.module.scss'
 import cl from 'classnames'
 import Menu from './Menu'
 
@@ -12,7 +12,7 @@ export interface LayoutProps extends PageProps {}
 
 const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
   children,
-  meta,
+  meta: metaPartial,
 }) => {
   const pageLinks = React.useMemo(
     () =>
@@ -20,6 +20,11 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
         ?.filter((m) => m.slug)
         .sort((a, b) => (a.title ?? '').localeCompare(b.title ?? '')),
     [],
+  )
+
+  const meta = React.useMemo(
+    () => metaList.find((m) => m.title === metaPartial?.title),
+    [metaPartial?.title],
   )
 
   return (
@@ -34,6 +39,7 @@ const Layout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
         </header>
         <main className={cl(styles.itemMain, styles.content)}>
           <h1>{meta?.title}</h1>
+          {/* <span className={styles.attribution}>{meta?.author}</span> */}
           {children}
         </main>
         <aside className={styles.itemRight}>

@@ -1,4 +1,5 @@
-import Animation2D from '@/components/Animation2D'
+import Animation2DBrowser from '@/components/Animation2DBrowser'
+import dynamic from 'next/dynamic'
 
 export const meta = {
   title: 'Ninja 2D',
@@ -12,7 +13,7 @@ export function getStaticProps() {
 
 export const keys = [0, 1, 2, 3, 4, 5, 6, 7]
 
-<Animation2D
+<Animation2DBrowser
   frames={{
     S: keys.map((i) => `assets/emeraldwalk/ninja2d/walk_0_${i}.25.png`),
     SE: keys.map((i) => `assets/emeraldwalk/ninja2d/walk_45_${i}.25.png`),
