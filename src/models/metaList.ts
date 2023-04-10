@@ -18,6 +18,17 @@ export const metaList: Meta[] = [
   },
   {
     "author": "Brian Ingles",
+    "slug": "dad-vs-judah",
+    "ext": "mdx",
+    "title": "Dad vs Judah Game",
+    "date": "2023-04-10",
+    "tags": [
+      "games",
+      "godot"
+    ]
+  },
+  {
+    "author": "Brian Ingles",
     "slug": "",
     "ext": "tsx",
     "title": "Home",
