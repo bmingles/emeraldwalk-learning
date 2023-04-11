@@ -97,8 +97,13 @@ const Menu: React.FC<MenuProps> = ({ className, metaList }) => {
         </svg> */}
         {/* <label className={styles.label}>Menu</label> */}
       </button>
-      {isExpanded && (
-        <div className={styles.items} onClick={onToggleClick}>
+      {
+        <div
+          className={cl(
+            styles.items,
+            isExpanded ? styles['is-expanded'] : styles['is-collapsed'],
+          )}
+          onClick={onToggleClick}>
           {pageLinks?.map(({ slug, title }, i) => (
             <Link
               ref={i === 0 ? firstItemRef : undefined}
@@ -109,7 +114,7 @@ const Menu: React.FC<MenuProps> = ({ className, metaList }) => {
             </Link>
           ))}
         </div>
-      )}
+      }
     </nav>
   )
 }

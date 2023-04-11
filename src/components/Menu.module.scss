@@ -18,12 +18,18 @@
     position: absolute;
     flex-direction: column;
     top: 40px;
+    width: calc(100vw - 40px);
     > * {
       padding: 4px 8px;
       white-space: nowrap;
-      // &:hover {
-      //   background-color: #99e;
-      // }
+    }
+    &.is-collapsed {
+      left: -100vw;
+      transition: 0.2s;
+    }
+    &.is-expanded {
+      left: 0;
+      transition: 0.2s;
     }
   }
 }
