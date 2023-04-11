@@ -15,10 +15,12 @@
   .items {
     background-color: #fff;
     display: flex;
+    padding: 0 20px;
     position: absolute;
     flex-direction: column;
     top: 40px;
-    width: calc(100vw - 40px);
+    width: 100vw;
+    height: 100vh;
     > * {
       padding: 4px 8px;
       white-space: nowrap;
@@ -28,7 +30,7 @@
       transition: 0.2s;
     }
     &.is-expanded {
-      left: 0;
+      left: -20px;
       transition: 0.2s;
     }
   }

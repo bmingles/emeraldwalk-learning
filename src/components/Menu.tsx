@@ -14,7 +14,20 @@ const Menu: React.FC<MenuProps> = ({ className, metaList }) => {
   const firstItemRef = React.useRef<HTMLAnchorElement>(null)
   const [isExpanded, setIsExpanded] = React.useState(false)
 
-  const onToggleClick = React.useCallback(() => {
+  React.useEffect(() => {
+    function offClick() {
+      setIsExpanded(false)
+    }
+
+    document.addEventListener('click', offClick)
+
+    return () => {
+      document.removeEventListener('click', offClick)
+    }
+  }, [])
+
+  const onToggleClick = React.useCallback((event?: React.MouseEvent) => {
+    event?.stopPropagation()
     buttonRef.current?.focus()
     setIsExpanded((isExpanded) => !isExpanded)
   }, [])
@@ -67,10 +80,12 @@ const Menu: React.FC<MenuProps> = ({ className, metaList }) => {
   )
 
   const pageLinks = React.useMemo(
-    () =>
-      metaList
+    () => [
+      { title: '🏠 Home', slug: '' },
+      ...metaList
         ?.filter((m) => m.slug)
         .sort((a, b) => (a.title ?? '').localeCompare(b.title ?? '')),
+    ],
     [metaList],
   )
 
