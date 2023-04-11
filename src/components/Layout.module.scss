@@ -27,6 +27,10 @@
 }
 .itemMain {
   grid-area: main;
+  a {
+    color: #080;
+    text-decoration: underline;
+  }
 }
 .attribution {
   display: block;
