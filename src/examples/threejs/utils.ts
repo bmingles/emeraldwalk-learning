@@ -14,11 +14,17 @@ export function addGridHelper(scene: THREE.Scene) {
   scene.add(gridHelper)
 }
 
-export function addLights(scene: THREE.Scene) {
-  const ambientLight = new THREE.HemisphereLight('white', 'darkslategrey', 5)
-  const mainLight = new THREE.DirectionalLight('white', 4)
-  mainLight.position.set(10, 10, 10)
-  scene.add(ambientLight, mainLight)
+export function addLights(scene: THREE.Scene, camera: THREE.PerspectiveCamera) {
+  // const ambientLight = new THREE.HemisphereLight('white', 'darkslategrey', 5)
+  // const mainLight = new THREE.DirectionalLight('white', 4)
+  // mainLight.position.set(10, 10, 10)
+  // scene.add(ambientLight, mainLight)
+
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7)
+  const pointLight = new THREE.PointLight(0xffffff, 0.6)
+  camera.add(pointLight)
+
+  scene.add(ambientLight, camera)
 }
 
 export function addOrbitControls(
@@ -84,7 +90,7 @@ export function createLoadModel({
 
     // Lights
     addGridHelper(world.scene)
-    addLights(world.scene)
+    addLights(world.scene, world.camera)
     addOrbitControls(
       world.camera,
       world.renderer.domElement,

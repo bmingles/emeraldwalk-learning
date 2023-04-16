@@ -36,6 +36,17 @@ export const metaList: Meta[] = [
   },
   {
     "author": "Brian Ingles",
+    "slug": "mandalorian",
+    "ext": "mdx",
+    "title": "Mandalorian",
+    "date": "2023-04-06",
+    "tags": [
+      "animation",
+      "imphenzia"
+    ]
+  },
+  {
+    "author": "Brian Ingles",
     "slug": "ninja-animation",
     "ext": "mdx",
     "title": "Ninja Animation",

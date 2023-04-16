@@ -1,0 +1,22 @@
+import ThreeScene from '@/components/ThreeScene'
+import { createLoadModel } from '@/examples/threejs/utils'
+
+export const meta = {
+  title: 'Mandalorian',
+  date: '2023-04-06',
+  tags: ['animation', 'imphenzia'],
+}
+
+export function getStaticProps() {
+  return { props: { meta } }
+}
+
+Imphenzia 10 Minutes in Blender - Lesson 11
+
+<ThreeScene
+  load={createLoadModel({
+    modelUrl: '/assets/emeraldwalk/051.mandalorian.glb',
+    cameraPosition: [0.5, 1, 2],
+    cameraLookAt: [0, 1, 0],
+  })}
+/>
