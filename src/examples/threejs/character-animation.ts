@@ -33,7 +33,7 @@ export async function loadScene(
 
   // Lights
   addGridHelper(world.scene)
-  addLights(world.scene)
+  addLights(world.scene, world.camera)
   addOrbitControls(world.camera, world.renderer.domElement)
 
   world.start(createTickers(mixer))
