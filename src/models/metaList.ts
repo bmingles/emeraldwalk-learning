@@ -4,17 +4,11 @@ import { Meta } from './page'
 export const metaList: Meta[] = [
   {
     "author": "Brian Ingles",
-    "slug": "character-animation",
-    "ext": "mdx",
-    "title": "Character Animation",
-    "date": "2023-03-19"
-  },
-  {
-    "author": "Brian Ingles",
     "slug": "css-grid",
     "ext": "mdx",
     "title": "CSS Grid",
-    "date": "2023-03-19"
+    "date": "2023-03-19",
+    "isPublished": true
   },
   {
     "author": "Brian Ingles",
@@ -22,6 +16,7 @@ export const metaList: Meta[] = [
     "ext": "mdx",
     "title": "Dad vs Judah Game",
     "date": "2023-04-10",
+    "isPublished": true,
     "tags": [
       "games",
       "godot"
@@ -32,7 +27,8 @@ export const metaList: Meta[] = [
     "slug": "",
     "ext": "tsx",
     "title": "Home",
-    "date": "2023-03-19"
+    "date": "2023-03-19",
+    "isPublished": true
   },
   {
     "author": "Brian Ingles",
@@ -40,6 +36,7 @@ export const metaList: Meta[] = [
     "ext": "mdx",
     "title": "Mandalorian",
     "date": "2023-04-06",
+    "isPublished": true,
     "tags": [
       "animation",
       "imphenzia"
@@ -50,7 +47,8 @@ export const metaList: Meta[] = [
     "slug": "ninja-animation",
     "ext": "mdx",
     "title": "Ninja Animation",
-    "date": "2023-03-20"
+    "date": "2023-03-20",
+    "isPublished": true
   },
   {
     "author": "Brian Ingles",
@@ -58,6 +56,7 @@ export const metaList: Meta[] = [
     "ext": "mdx",
     "title": "Ninja 2D",
     "date": "2023-04-06",
+    "isPublished": true,
     "tags": [
       "animation",
       "imphenzia",
@@ -70,6 +69,7 @@ export const metaList: Meta[] = [
     "ext": "mdx",
     "title": "Pirate",
     "date": "2023-04-06",
+    "isPublished": true,
     "tags": [
       "animation",
       "imphenzia"
@@ -80,6 +80,7 @@ export const metaList: Meta[] = [
     "slug": "threejs-animation",
     "ext": "mdx",
     "title": "Three.js Animation",
-    "date": "2023-03-19"
+    "date": "2023-03-19",
+    "isPublished": true
   }
 ]

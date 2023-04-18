@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google'
 export const meta = {
   title: 'Home',
   date: '2023-03-19',
+  isPublished: true,
 }
 
 export function getStaticProps() {
