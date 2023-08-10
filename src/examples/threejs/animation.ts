@@ -12,6 +12,7 @@ import {
 
 export async function loadScene(
   container: HTMLElement,
+  processModel?: (model: THREE.Object3D) => void,
 ): Promise<LoadedModelConfig> {
   const world = new World(container)
   world.camera.position.set(-1.5, 1.5, 6.5)
@@ -24,11 +25,13 @@ export async function loadScene(
     transparent: true,
   })
   const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+
   world.scene.add(cube)
 
   // parrot
   const parrotData = await loader.loadAsync('/assets/threejs/Parrot.glb')
   const parrotModel = parrotData.scene.children[0]
+  processModel?.(parrotModel)
   const parrotClip = parrotData.animations[0]
   const parrotMixer = new THREE.AnimationMixer(parrotModel)
   const parrotAction = parrotMixer.clipAction(parrotClip)

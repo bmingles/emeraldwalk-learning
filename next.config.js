@@ -15,6 +15,13 @@ const withMDX = require('@next/mdx')({
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   reactStrictMode: true,
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.(glsl)$/,
+      type: 'asset/source',
+    })
+    return config
+  },
 }
 
 module.exports = withMDX(nextConfig)

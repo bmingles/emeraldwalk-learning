@@ -1,12 +1,17 @@
-import React from 'react'
-import { LoadedModelConfig } from '../examples/threejs/utils'
+import React, { useCallback } from 'react'
+import { LoadedModelConfig, addShaderMaterial } from '../examples/threejs/utils'
 
 export interface ThreeSceneProps {
-  load: (container: HTMLElement) => Promise<LoadedModelConfig>
+  applyShader?: boolean
+  load: (
+    container: HTMLElement,
+    processModel?: (model: THREE.Object3D) => void,
+  ) => Promise<LoadedModelConfig>
 }
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
   const containerRef = React.useRef<HTMLDivElement>(null)
+  const [applyShader, setApplyShader] = React.useState(false)
   const [config, setConfig] = React.useState<LoadedModelConfig | null>(null)
   const [action, setAction] = React.useState<string>()
   console.log(action)
@@ -14,7 +19,10 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
     let dispose: () => void
 
     const timeout = setTimeout(async () => {
-      const config = await load(containerRef.current!)
+      const config = await load(
+        containerRef.current!,
+        applyShader ? addShaderMaterial : undefined,
+      )
       dispose = config.dispose
       setConfig(config)
     }, 0)
@@ -23,9 +31,13 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
       clearTimeout(timeout)
       dispose?.()
     }
-  }, [load])
+  }, [applyShader, load])
 
   const hasActions = Object.keys(config?.actions ?? {}).length > 0
+
+  const onToggleApplyShader = useCallback(() => {
+    setApplyShader((a) => !a)
+  }, [])
 
   const onActionChange = React.useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -46,6 +58,13 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
 
   return (
     <>
+      <input
+        id="apply-shader"
+        type="checkbox"
+        checked={applyShader}
+        onChange={onToggleApplyShader}
+      />
+      <label htmlFor="apply-shader">Apply Shader</label>
       {hasActions && (
         <select value={action} onChange={onActionChange}>
           <option>- Action -</option>

@@ -4,6 +4,9 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { World } from './World'
 
+import fragmentShader from '../../shaders/fragment.glsl'
+import vertexShader from '../../shaders/vertex.glsl'
+
 export type DeltaHandler = (delta: number) => void
 
 export function addGridHelper(scene: THREE.Scene) {
@@ -38,6 +41,19 @@ export function addOrbitControls(
   }
 }
 
+export function addShaderMaterial(object: THREE.Object3D): void {
+  const shaderMaterial = new THREE.ShaderMaterial({
+    fragmentShader,
+    vertexShader,
+  })
+
+  object.traverse((o) => {
+    if (o instanceof THREE.Mesh) {
+      o.material = shaderMaterial
+    }
+  })
+}
+
 export function createTickers(
   ...updaters: { update: DeltaHandler }[]
 ): { tick: DeltaHandler }[] {
@@ -60,6 +76,7 @@ export function createLoadModel({
 }) {
   return async function loadModel(
     container: HTMLElement,
+    processModel?: (model: THREE.Object3D) => void,
   ): Promise<LoadedModelConfig> {
     const world = new World(container)
     world.camera.position.set(x, y, z)
@@ -75,6 +92,8 @@ export function createLoadModel({
       : (file as GLTF).scene.children[0]
     // model.scale.set(0.01, 0.01, 0.01)
 
+    processModel?.(model)
+
     const clip = file.animations[0] //.find((a) => a.name === 'Walk')
     const mixer = new THREE.AnimationMixer(model)
 
@@ -85,7 +104,7 @@ export function createLoadModel({
 
     world.scene.add(model)
 
-    console.log('gltf:', file)
+    console.log('model:', model)
     console.log(clip)
 
     // Lights
