@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { LoadedModelConfig, addShaderMaterial } from '../examples/threejs/utils'
 import { ShaderName, shaders } from '../shaders'
+import { useRouter } from 'next/router'
 
 export interface ThreeSceneProps {
   applyShader?: boolean
@@ -11,11 +12,15 @@ export interface ThreeSceneProps {
 }
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
+  const { shader: defaultShader } = useRouter().query as { shader?: ShaderName }
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const [shaderName, setShaderName] = useState<ShaderName | ''>('')
+  const [shaderName, setShaderName] = useState<ShaderName | ''>(
+    defaultShader ?? '',
+  )
   const [config, setConfig] = useState<LoadedModelConfig | null>(null)
   const [action, setAction] = useState<string>()
-  console.log(action)
+
+  console.log(action, defaultShader)
   React.useEffect(() => {
     let dispose: () => void
 
