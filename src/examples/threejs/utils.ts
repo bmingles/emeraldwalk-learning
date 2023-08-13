@@ -3,11 +3,14 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { World } from './World'
-
-import fragmentShader from '../../shaders/fragment.glsl'
-import vertexShader from '../../shaders/vertex.glsl'
+import { ShaderConfig } from '../../models'
 
 export type DeltaHandler = (delta: number) => void
+
+export function addAxisHelper(scene: THREE.Scene) {
+  const axisHelper = new THREE.AxesHelper(5)
+  scene.add(axisHelper)
+}
 
 export function addGridHelper(scene: THREE.Scene) {
   const gridHelper = new THREE.GridHelper(20, 20)
@@ -41,17 +44,19 @@ export function addOrbitControls(
   }
 }
 
-export function addShaderMaterial(object: THREE.Object3D): void {
-  const shaderMaterial = new THREE.ShaderMaterial({
-    fragmentShader,
-    vertexShader,
-  })
+export function addShaderMaterial({ fragment, vertex }: ShaderConfig) {
+  return (object: THREE.Object3D) => {
+    const shaderMaterial = new THREE.ShaderMaterial({
+      fragmentShader: fragment,
+      vertexShader: vertex,
+    })
 
-  object.traverse((o) => {
-    if (o instanceof THREE.Mesh) {
-      o.material = shaderMaterial
-    }
-  })
+    object.traverse((o) => {
+      if (o instanceof THREE.Mesh) {
+        o.material = shaderMaterial
+      }
+    })
+  }
 }
 
 export function createTickers(
@@ -70,7 +75,7 @@ export function createLoadModel({
   cameraPosition: [x, y, z],
   cameraLookAt,
 }: {
-  modelUrl: string
+  modelUrl?: string
   cameraPosition: [number, number, number]
   cameraLookAt?: [number, number, number]
 }) {
@@ -81,33 +86,42 @@ export function createLoadModel({
     const world = new World(container)
     world.camera.position.set(x, y, z)
 
-    const isFBX = modelUrl.endsWith('.fbx')
+    let model: THREE.Object3D | null = null
+    let actions: Record<string, THREE.AnimationAction> = {}
+    let mixer: THREE.AnimationMixer | null = null
 
-    const loader = isFBX ? new FBXLoader() : new GLTFLoader()
+    if (modelUrl) {
+      const isFBX = modelUrl.endsWith('.fbx')
 
-    // Soldier
-    const file = await loader.loadAsync(modelUrl)
-    const model = isFBX
-      ? (file as THREE.Group)
-      : (file as GLTF).scene.children[0]
-    // model.scale.set(0.01, 0.01, 0.01)
+      const loader = isFBX ? new FBXLoader() : new GLTFLoader()
+
+      const file = await loader.loadAsync(modelUrl)
+      model = isFBX ? (file as THREE.Group) : (file as GLTF).scene.children[0]
+      // model.scale.set(0.01, 0.01, 0.01)
+
+      const clip = file.animations[0] //.find((a) => a.name === 'Walk')
+      mixer = new THREE.AnimationMixer(model)
+
+      actions = file.animations.reduce((memo, clip) => {
+        memo[clip.name] = mixer!.clipAction(clip)
+        return memo
+      }, {} as Record<string, THREE.AnimationAction>)
+    } else {
+      const geometry = new THREE.PlaneGeometry(2, 2)
+      const material = new THREE.MeshBasicMaterial({
+        color: 0xffff00,
+        side: THREE.DoubleSide,
+      })
+      model = new THREE.Mesh(geometry, material)
+      model.rotateX(-Math.PI / 2)
+    }
 
     processModel?.(model)
-
-    const clip = file.animations[0] //.find((a) => a.name === 'Walk')
-    const mixer = new THREE.AnimationMixer(model)
-
-    const actions = file.animations.reduce((memo, clip) => {
-      memo[clip.name] = mixer.clipAction(clip)
-      return memo
-    }, {} as Record<string, THREE.AnimationAction>)
-
     world.scene.add(model)
-
     console.log('model:', model)
-    console.log(clip)
 
     // Lights
+    addAxisHelper(world.scene)
     addGridHelper(world.scene)
     addLights(world.scene, world.camera)
     addOrbitControls(
@@ -123,7 +137,11 @@ export function createLoadModel({
       world.camera.lookAt(x, y, z)
     }
 
-    world.start(createTickers(mixer))
+    if (mixer) {
+      world.start(createTickers(mixer))
+    } else {
+      world.start()
+    }
 
     return {
       actions,

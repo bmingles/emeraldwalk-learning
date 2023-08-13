@@ -77,6 +77,14 @@ export const metaList: Meta[] = [
   },
   {
     "author": "Brian Ingles",
+    "slug": "shaders",
+    "ext": "mdx",
+    "title": "Shaders",
+    "date": "2023-08-13",
+    "isPublished": true
+  },
+  {
+    "author": "Brian Ingles",
     "slug": "threejs-animation",
     "ext": "mdx",
     "title": "Three.js Animation",

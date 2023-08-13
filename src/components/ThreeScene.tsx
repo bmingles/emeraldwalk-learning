@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { LoadedModelConfig, addShaderMaterial } from '../examples/threejs/utils'
+import { ShaderName, shaders } from '../shaders'
 
 export interface ThreeSceneProps {
   applyShader?: boolean
@@ -11,9 +12,9 @@ export interface ThreeSceneProps {
 
 const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const [applyShader, setApplyShader] = React.useState(false)
-  const [config, setConfig] = React.useState<LoadedModelConfig | null>(null)
-  const [action, setAction] = React.useState<string>()
+  const [shaderName, setShaderName] = useState<ShaderName | ''>('')
+  const [config, setConfig] = useState<LoadedModelConfig | null>(null)
+  const [action, setAction] = useState<string>()
   console.log(action)
   React.useEffect(() => {
     let dispose: () => void
@@ -21,7 +22,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
     const timeout = setTimeout(async () => {
       const config = await load(
         containerRef.current!,
-        applyShader ? addShaderMaterial : undefined,
+        shaderName ? addShaderMaterial(shaders[shaderName]) : undefined,
       )
       dispose = config.dispose
       setConfig(config)
@@ -31,13 +32,9 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
       clearTimeout(timeout)
       dispose?.()
     }
-  }, [applyShader, load])
+  }, [load, shaderName])
 
   const hasActions = Object.keys(config?.actions ?? {}).length > 0
-
-  const onToggleApplyShader = useCallback(() => {
-    setApplyShader((a) => !a)
-  }, [])
 
   const onActionChange = React.useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -56,15 +53,15 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
     [action, config?.actions],
   )
 
+  const onShaderNameChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setShaderName(event.currentTarget.value as typeof shaderName)
+    },
+    [],
+  )
+
   return (
     <>
-      <input
-        id="apply-shader"
-        type="checkbox"
-        checked={applyShader}
-        onChange={onToggleApplyShader}
-      />
-      <label htmlFor="apply-shader">Apply Shader</label>
       {hasActions && (
         <select value={action} onChange={onActionChange}>
           <option>- Action -</option>
@@ -75,6 +72,14 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
           ))}
         </select>
       )}
+      <select value={shaderName} onChange={onShaderNameChange}>
+        <option value="">- Shader -</option>
+        {Object.entries(shaders).map(([key]) => (
+          <option key={key} value={key}>
+            {key}
+          </option>
+        ))}
+      </select>
       <div ref={containerRef} style={{ width: 400, height: 400 }}></div>
     </>
   )

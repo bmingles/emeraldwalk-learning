@@ -25,10 +25,10 @@ export class World {
   scene: THREE.Scene
   renderer: THREE.WebGLRenderer
 
-  start = (tickers: { tick: DeltaHandler }[]) => {
+  start = (tickers?: { tick: DeltaHandler }[]) => {
     this.renderer.setAnimationLoop(() => {
       const delta = this.clock.getDelta()
-      tickers.forEach((ticker) => {
+      tickers?.forEach((ticker) => {
         ticker.tick(delta)
       })
       this.renderer.render(this.scene, this.camera)
