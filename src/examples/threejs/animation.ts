@@ -1,13 +1,11 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { World } from './World'
 import {
   LoadedModelConfig,
   addGridHelper,
   addLights,
   addOrbitControls,
-  createTickers,
 } from './utils'
 
 export async function loadScene(
@@ -56,7 +54,7 @@ export async function loadScene(
   const action = mixer.clipAction(moveAndBlinkClip)
   // action.play()
 
-  world.start(createTickers(mixer, parrotMixer))
+  world.start([mixer, parrotMixer])
 
   return {
     actions: { [moveAndBlinkClip.name]: action },

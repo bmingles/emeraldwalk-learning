@@ -5,7 +5,6 @@ import {
   addGridHelper,
   addLights,
   addOrbitControls,
-  createTickers,
 } from './utils'
 import { World } from './World'
 
@@ -36,7 +35,7 @@ export async function loadScene(
   addLights(world.scene, world.camera)
   addOrbitControls(world.camera, world.renderer.domElement)
 
-  world.start(createTickers(mixer))
+  world.start([mixer])
 
   return {
     actions: { [clip!.name]: action },
