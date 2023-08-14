@@ -1,27 +1,37 @@
-import React, { useCallback, useMemo, useState } from 'react'
-import { LoadedModelConfig, addShaderMaterial } from '../examples/threejs/utils'
-import { ShaderName, shaders } from '../shaders'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { LoadedModelConfig } from '../examples/threejs/utils'
 import { useRouter } from 'next/router'
+import { ShaderName, shaders } from '../shaders'
+import { ProcessModelFn } from '../models'
+import { addShaderMaterial } from '../utils'
 
 export interface ThreeSceneProps {
   applyShader?: boolean
+  width?: number
+  height?: number
   load: (
     container: HTMLElement,
-    processModel?: (model: THREE.Object3D) => void,
+    processModel?: ProcessModelFn,
   ) => Promise<LoadedModelConfig>
 }
 
-const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
+const ThreeScene: React.FC<ThreeSceneProps> = ({
+  load,
+  width = 400,
+  height = 400,
+}) => {
   const { shader: defaultShader } = useRouter().query as { shader?: ShaderName }
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const [shaderName, setShaderName] = useState<ShaderName | ''>(
-    defaultShader ?? '',
-  )
+  const [shaderName, setShaderName] = useState<ShaderName | ''>('')
   const [config, setConfig] = useState<LoadedModelConfig | null>(null)
   const [action, setAction] = useState<string>()
 
-  console.log(action, defaultShader)
-  React.useEffect(() => {
+  useEffect(() => {
+    setShaderName(defaultShader ?? '')
+  }, [defaultShader])
+
+  console.log(action, shaderName, defaultShader)
+  useEffect(() => {
     let dispose: () => void
 
     const timeout = setTimeout(async () => {
@@ -85,7 +95,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({ load }) => {
           </option>
         ))}
       </select>
-      <div ref={containerRef} style={{ width: 400, height: 400 }}></div>
+      <div ref={containerRef} style={{ width, height }}></div>
     </>
   )
 }

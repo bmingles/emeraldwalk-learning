@@ -3,9 +3,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { World } from './World'
-import { ShaderConfig } from '../../models'
-
-export type DeltaHandler = (delta: number) => void
+import { ProcessModelFn } from '../../models'
 
 export function addAxisHelper(scene: THREE.Scene) {
   const axisHelper = new THREE.AxesHelper(5)
@@ -44,27 +42,6 @@ export function addOrbitControls(
   }
 }
 
-export function addShaderMaterial({ fragment, vertex }: ShaderConfig) {
-  return (object: THREE.Object3D) => {
-    const shaderMaterial = new THREE.ShaderMaterial({
-      fragmentShader: fragment,
-      vertexShader: vertex,
-    })
-
-    object.traverse((o) => {
-      if (o instanceof THREE.Mesh) {
-        o.material = shaderMaterial
-      }
-    })
-  }
-}
-
-export function createTickers(
-  ...updaters: { update: DeltaHandler }[]
-): { tick: DeltaHandler }[] {
-  return updaters.map((u) => ({ tick: (delta) => u.update(delta) }))
-}
-
 export interface LoadedModelConfig {
   actions: Record<string, THREE.AnimationAction>
   dispose: () => void
@@ -81,7 +58,7 @@ export function createLoadModel({
 }) {
   return async function loadModel(
     container: HTMLElement,
-    processModel?: (model: THREE.Object3D) => void,
+    processModel?: ProcessModelFn,
   ): Promise<LoadedModelConfig> {
     const world = new World(container)
     world.camera.position.set(x, y, z)
@@ -116,7 +93,8 @@ export function createLoadModel({
       model.rotateX(-Math.PI / 2)
     }
 
-    processModel?.(model)
+    const processModelUpdater = processModel?.(world.renderer.domElement, model)
+
     world.scene.add(model)
     console.log('model:', model)
 
@@ -137,11 +115,7 @@ export function createLoadModel({
       world.camera.lookAt(x, y, z)
     }
 
-    if (mixer) {
-      world.start(createTickers(mixer))
-    } else {
-      world.start()
-    }
+    world.start([mixer, processModelUpdater])
 
     return {
       actions,

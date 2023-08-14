@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { DeltaHandler } from './utils'
+import { DeltaHandler } from '../../models'
 
 export class World {
   constructor(container: HTMLElement) {
@@ -25,11 +25,11 @@ export class World {
   scene: THREE.Scene
   renderer: THREE.WebGLRenderer
 
-  start = (tickers?: { tick: DeltaHandler }[]) => {
+  start = (updaters?: ({ update?: DeltaHandler } | null | undefined)[]) => {
     this.renderer.setAnimationLoop(() => {
       const delta = this.clock.getDelta()
-      tickers?.forEach((ticker) => {
-        ticker.tick(delta)
+      updaters?.forEach((updater) => {
+        updater?.update?.(delta)
       })
       this.renderer.render(this.scene, this.camera)
     })
